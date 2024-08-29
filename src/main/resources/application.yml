@@ -1,0 +1,11 @@
+spring:
+  data:
+    mongodb:
+      host: 103.226.249.128
+      port: 57017
+      database: tsdctest
+      username: tsdctest
+      password: CLzQhK8QYs4N9Sst
+
+server:
+  port: 8888

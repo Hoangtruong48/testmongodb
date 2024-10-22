@@ -1,4 +1,4 @@
-package com.example.demo_test.danh_muc_xa;
+package com.example.demo_test.danh_muc_huyen;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
@@ -11,20 +11,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Slf4j
-public class WriteSQL {
+public class SQLHuyenTest {
     public static void generateSQL(String path){
         FileInputStream inputStream = null;
         Workbook workbook = null;
-        String txtFilePath = "generatesql_casewhen.txt";
+        String txtFilePath = "generatesql_huyen_test_case_when.txt";
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(txtFilePath))){
             inputStream = new FileInputStream(path);
             workbook = new XSSFWorkbook(inputStream);
             String sheetName = "khác têngiữa file MOET và SME";
             Sheet sheetUpdateSme = workbook.getSheet(sheetName);
+            List<String> huyenSme = new ArrayList<>();
             boolean isFirstRow = true;
-            List<String> maXas = new ArrayList<>();
             writer.write("\n--------------------------------Update tên trong bảng SME giống với MOET--------------------------" + "\n");
             writer.write("UPDATE SME_CONSTANT" + "\n");
             writer.write("SET CONSTANT_TITLE = CASE CONSTANT_CODE" + "\n");
@@ -33,78 +32,78 @@ public class WriteSQL {
                     isFirstRow = false;
                     continue;
                 }
-                String maXa = row.getCell(0).getStringCellValue();
-                String tenXa = row.getCell(1).getStringCellValue();
-                maXas.add(maXa);
-                writer.write("\t" + " WHEN " + "'" + maXa + "'" + " THEN '" + tenXa + "'" + "\n");
+                String maHuyen = row.getCell(0).getStringCellValue();
+                String tenHuyen = row.getCell(1).getStringCellValue();
+                huyenSme.add(maHuyen);
+                writer.write("\t" + " WHEN " + "'" + maHuyen + "'" + " THEN '" + tenHuyen + "'" + "\n");
             }
             writer.write("\t" + "ELSE CONSTANT_TITLE" + "\n");
             writer.write("END," + "\n");
             writer.write("MODIFIED_DATE = SYSDATE" + "\n");
             writer.write("WHERE CONSTANT_CODE IN (");
-            for (int i = 0; i < maXas.size(); i++){
+            for (int i = 0; i < huyenSme.size(); i++){
                 writer.write("'");
-                writer.write(maXas.get(i));
-                if (i != maXas.size()-1){
-                    writer.write("', ");
-                }
-            }
-            writer.write("');");
-            //
-            String sheetName1 = "khác tên giữa MOET và DM_PXA";
-            Sheet sheetUpdateDmPxa = workbook.getSheet(sheetName1);
-            isFirstRow = true;
-            writer.write("\n-----------------------Update tên trong bảng DM_PHUONG_XA giống với MOET---------------------------" + "\n");
-            writer.write("UPDATE DM_PHUONG_XA" + "\n");
-            writer.write("SET TEN_PHUONG_XA = CASE MA_PHUONG_XA" + "\n");
-            List<String> maXaDmPxa = new ArrayList<>();
-            for (Row row : sheetUpdateDmPxa){
-                if (isFirstRow){
-                    isFirstRow = false;
-                    continue;
-                }
-                String maXa = row.getCell(0).getStringCellValue();
-                String tenXa = row.getCell(1).getStringCellValue();
-                maXaDmPxa.add(maXa);
-                writer.write("\t" + " WHEN " + "'" + maXa + "'" + " THEN '" + tenXa + "'" + "\n");
-            }
-            writer.write("\t" + "ELSE TEN_PHUONG_XA" + "\n");
-            writer.write("END," + "\n");
-            writer.write("NGAY_CAP_NHAT = SYSDATE" + "\n");
-            writer.write("WHERE MA_PHUONG_XA IN (");
-            for (int i = 0; i < maXaDmPxa.size(); i++){
-                writer.write("'");
-                writer.write(maXaDmPxa.get(i));
-                if (i != maXaDmPxa.size()-1){
+                writer.write(huyenSme.get(i));
+                if (i != huyenSme.size()-1){
                     writer.write("', ");
                 }
             }
             writer.write("');");
 
             //
-            String sheetName2 = "Có trong DM_PXA khôngcó trong M";
+            String sheetName1 = "khác tên giữa MOET và DM_QH";
+            Sheet sheetUpdateDmPxa = workbook.getSheet(sheetName1);
+            isFirstRow = true;
+            List<String> dmHuyen = new ArrayList<>();
+            writer.write("\n-----------------------Update tên trong bảng DM_QUAN_HUYEN giống với MOET---------------------------" + "\n");
+            writer.write("UPDATE DM_QUAN_HUYEN" + "\n");
+            writer.write("SET TEN_QUAN_HUYEN = CASE MA_QUAN_HUYEN" + "\n");
+            for (Row row : sheetUpdateDmPxa){
+                if (isFirstRow){
+                    isFirstRow = false;
+                    continue;
+                }
+                String maHuyen = row.getCell(0).getStringCellValue();
+                String tenHuyen = row.getCell(1).getStringCellValue();
+                dmHuyen.add(maHuyen);
+                writer.write("\t" + " WHEN " + "'" + maHuyen + "'" + " THEN '" + tenHuyen + "'" + "\n");
+            }
+            writer.write("\t" + "ELSE TEN_QUAN_HUYEN" + "\n");
+            writer.write("END," + "\n");
+            writer.write("NGAY_CAP_NHAT = SYSDATE" + "\n");
+            writer.write("WHERE MA_QUAN_HUYEN IN (");
+            for (int i = 0; i < dmHuyen.size(); i++){
+                writer.write("'");
+                writer.write(dmHuyen.get(i));
+                if (i != dmHuyen.size()-1){
+                    writer.write("', ");
+                }
+            }
+            writer.write("');");
+            //
+            String sheetName2 = "Có trong DM_QH khôngcó trong MO";
             Sheet sheetUpdateTrangThaiDMPhuongXa = workbook.getSheet(sheetName2);
             isFirstRow = true;
-            List<String> maXass = new ArrayList<>();
-            writer.write("\n--------------------Update trạng thái trong bảng dmphuongxa = 0------------------" + "\n");
-            writer.write("UPDATE DM_PHUONG_XA SET TRANG_THAI = CASE MA_PHUONG_XA \n");
+            writer.write("\n--------------------Update trạng thái trong bảng DM_QUAN_HUYEN = 0------------------" + "\n");
+            writer.write("UPDATE DM_QUAN_HUYEN SET TRANG_THAI = CASE MA_QUAN_HUYEN \n");
+            List<String> dmHuyenn = new ArrayList<>();
             for (Row row : sheetUpdateTrangThaiDMPhuongXa){
                 if (isFirstRow){
                     isFirstRow = false;
                     continue;
                 }
-                String maXa = row.getCell(0).getStringCellValue();
-                String tenXa = row.getCell(1).getStringCellValue();
-                maXass.add(maXa);
-                writer.write("\tWHEN '" + maXa + "' THEN 0 \n");
+                String maHuyen = row.getCell(0).getStringCellValue();
+                String tenHuyen = row.getCell(1).getStringCellValue();
+                dmHuyenn.add(maHuyen);
+                writer.write("\tWHEN '" + maHuyen + "' THEN 0 \n");
             }
             writer.write("ELSE TRANG_THAI END, \n");
             writer.write("NGAY_CAP_NHAT = SYSDATE" + "\n");
-            writer.write("WHERE MA_PHUONG_XA IN (");
-            for (int i = 0; i < maXass.size(); i++){
+            writer.write("WHERE MA_QUAN_HUYEN IN (");
+            for (int i = 0; i < dmHuyenn.size(); i++){
                 writer.write("'");
-                writer.write(maXass.get(i));
-                if (i != maXass.size()-1){
+                writer.write(dmHuyenn.get(i));
+                if (i != dmHuyenn.size()-1){
                     writer.write("', ");
                 }
             }
@@ -144,6 +143,6 @@ public class WriteSQL {
         }
     }
     public static void main(String[] args) {
-        generateSQL("C:\\Users\\acer\\Downloads\\Telegram Desktop\\TK_DM_PXA.xlsx");
+        generateSQL("E:\\tuyensinhdaucap\\demo_test\\TK_DM_HUYEN_TEST.xlsx");
     }
 }

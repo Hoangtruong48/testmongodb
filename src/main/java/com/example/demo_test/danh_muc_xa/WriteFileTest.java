@@ -158,7 +158,7 @@ public class WriteFileTest {
         Row row2 = sheet8.createRow(rowCount8++);
         row2.createCell(0).setCellValue("SME");
         row2.createCell(1).setCellValue("Dữ liệu trong bảng SME_CONSTANT");
-        Row row3 = sheet8.createRow(rowCount8++);
+        Row row3 = sheet8.createRow(rowCount8);
         row3.createCell(0).setCellValue("MOET");
         row3.createCell(1).setCellValue("Dữ liệu trong file excel");
 

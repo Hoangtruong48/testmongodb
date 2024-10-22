@@ -242,7 +242,7 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.example.demo_test.EnrollmentSvcApiApplication</mainClass>
+							<mainClass>com.example.demo_test.DemoTestApplication</mainClass>
 						</manifest>
 						<manifestEntries>
 							<Class-Path>.</Class-Path>

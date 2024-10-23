@@ -1,6 +1,4 @@
-package com.example.demo_test.danh_muc_xa;
-
-import com.example.demo_test.test.Test;
+package com.example.demo_test.test;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +16,7 @@ public class MultiTheardTest {
         for (int i = 0; i < n; i++){
             arrayRandom.add(random.nextInt(n));
         }
-        ExecutorService executorService = Executors.newFixedThreadPool(4);
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
         List<CompletableFuture<Void>> futures = new ArrayList<>();
         futures.add(CompletableFuture.runAsync(() -> Test.eratosthenes(sieve, n), executorService));
         futures.add(CompletableFuture.runAsync(() -> {

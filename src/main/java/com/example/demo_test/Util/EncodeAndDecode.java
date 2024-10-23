@@ -1,7 +1,11 @@
 package com.example.demo_test.Util;
 
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Random;
 
@@ -9,6 +13,8 @@ public class EncodeAndDecode {
     private static final char[] normalChars = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j',
             'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y',
             '2', '3', '4', '5', '6', '7', '8', '9'};
+    private static final Logger log = LoggerFactory.getLogger(EncodeAndDecode.class);
+
     public static String customEncodeMaBaoMat(String maBaoMat) {
         if (Strings.isNullOrEmpty(maBaoMat)) {
             return maBaoMat;
@@ -54,7 +60,20 @@ public class EncodeAndDecode {
             return null;
         }
     }
-
+    public static String generateHash(String input, String algo){
+        try{
+            MessageDigest messageDigest = MessageDigest.getInstance(algo);
+            byte[] hashInBytes = messageDigest.digest(input.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashInBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex){
+            log.error(ex.getMessage());
+            throw new RuntimeException(ex);
+        }
+    }
     public static void main(String[] args) {
         System.out.println(decodeMaBaoMat("1jTVRJek5EVTI="));
     }
